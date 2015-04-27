@@ -1,7 +1,8 @@
 {
   "name": "@dmail/symlink",
   "version": "0.1.1",
-  "main": "bin",
+  "main": "symlink",
+  "bin": "symlink",
   "preferGlobal": true,
   "repository": {
     "type": "git",
