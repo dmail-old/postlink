@@ -1,0 +1,11 @@
+{
+  "name": "@dmail/symlink",
+  "version": "0.0.2",
+  "main": "symlink",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dmail/symlink"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}
