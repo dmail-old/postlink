@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /*
 
 For each module found in the source folder
