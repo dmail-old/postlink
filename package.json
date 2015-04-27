@@ -2,6 +2,7 @@
   "name": "@dmail/symlink",
   "version": "0.0.2",
   "main": "symlink",
+  "preferGlobal": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/dmail/symlink"
