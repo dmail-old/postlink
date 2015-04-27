@@ -17,7 +17,7 @@ Do
 
 - `npm install -g symlink`
 - `cd your-project`
-- `symlink ../node_modules/`
+- `symlink ../node_modules`
 
 It will symlink your local modules in the top level node_modules folder
 
