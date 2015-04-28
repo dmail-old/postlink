@@ -1,6 +1,6 @@
 {
   "name": "@dmail/symlink",
-  "version": "0.1.3",
+  "version": "1.0.0",
   "main": "symlink",
   "bin": "symlink.js",
   "preferGlobal": true,
