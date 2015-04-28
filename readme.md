@@ -1,31 +1,35 @@
 # symlink
 
-Keep your module sources out of your working directory.
+Symlink your module to keep clean and separate sources from project usage
 
 ## Example
 
-With this directory structure
+Before
 
 ```
 /node_modules
-	/module-under-dev-a
-	/module-under-dev-b
+	/a@1.0.0
+	/b@0.0.3
 /your-project
+    /node_modules
+    	/a@1.0.0
+    		/node_modules
+    			b@0.0.3
+    	/b@0.5.0
 ```
 
-Do
-
-- `npm install -g symlink`
-- `cd your-project`
-- `symlink ../node_modules`
-
-It will symlink your local modules in the top level node_modules folder
+`cd your-project && symlink`
 
 ```
+/node_modules
+	/a@1.0.0
+		/node_modules
+			/-> ../../b@0.0.3
+	/b@0.0.3
 /your-project
-	/node_modules
-		/[symlink to ../../node_modules/module-under-dev-a]
-		/[symlink to ../../node_modules/module-under-dev-b]
+    /node_modules
+    	/-> ../../node_modules/a@1.0.0
+    	/b@0.5.0
 ```
 
-You can run `symlink ../node_modules` to keep your folder in sync with your project before or after `npm install`
+Very similar to [zelda](https://github.com/feross/zelda)
