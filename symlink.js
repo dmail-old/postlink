@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
 /*
-
 Walk the dependencies to symlink any module having a parent module with same name & version
-
 */
 
 var fs = require('fs');
@@ -102,9 +100,11 @@ function debug(){
 	var args = Array.prototype.slice.call(arguments);
 
 	console.log.apply(console, args.map(function(arg){
-		if( arg.indexOf(path.sep) !== -1 ){
+		/*
+		if( arg && arg.indexOf(path.sep) !== -1 ){
 			return shortenPath(arg);
 		}
+		*/
 		return arg;
 	}));
 }
@@ -160,6 +160,8 @@ function symlinkModule(source, destination){
 		if( lstat.isSymbolicLink() ){
 			var linkPath = fs.readlinkSync(destination);
 
+			if( linkPath[linkPath.length -1] === path.sep ) linkPath = linkPath.slice(0, -1);
+
 			if( linkPath != source ){
 				debug('remove previous link to', linkPath);
 				fs.unlinkSync(destination);
@@ -190,68 +192,83 @@ function symlinkModule(source, destination){
 	fs.symlinkSync(source, destination, 'junction');
 }
 
+function getDependencyModule(modulePath, dependencyName){
+	var dependencyPath, dependencyModule;
+
+	dependencyPath = path.join(modulePath, 'node_modules', dependencyName);
+
+	console.log('existing', dependencyName, 'at', dependencyPath);
+
+	if( fs.existsSync(dependencyPath) ){
+		dependencyModule = getModule(dependencyPath);
+	}
+
+	return dependencyModule;
+}
+
+// search any parent folder for the given module
+function getParentModule(modulePath, dependencyName){
+	var parentPath, parentModule;
+	
+	parentPath = path.join(path.dirname(modulePath), dependencyName);
+	
+	if( fs.existsSync(parentPath) ){
+		parentModule = getModule(parentPath);
+		debug(dependencyName, 'found at', parentPath);
+	}
+	else{
+		debug(dependencyName, 'not found at', parentPath);
+	}
+
+	return parentModule;
+}
+
 function symlink(modulePath){
 	var linkedModules = [];
 	var module = getModule(modulePath);
+	var dependencies = Object.keys(module.dependencies);
 
-	childProcess.execSync('npm install', {
-		cwd: modulePath
-	});
+	if( dependencies.length ){
+		dependencies.forEach(function(dependencyName){
+			//var dependencyModule = getDependencyModule(modulePath, dependencyName);		
+			var parentModule = getParentModule(modulePath, dependencyName);
 
-	Object.keys(module.dependencies).forEach(function(dependencyName){
-		var dependencyPath, dependencyModule, parentPath, parentModule;
-
-		try{
-			dependencyPath = path.dirname(require.resolve(path.join(modulePath, 'node_modules', dependencyName)));
-		}
-		catch(e){
-			if( e.code === 'MODULE_NOT_FOUND' ){
-				throw new Error('your dependency to ' + dependencyName + ' is unresolved, did you run npm install?');
-			}
-			throw e;
-		}
-		dependencyModule = getModule(dependencyPath);
-
-		//console.log('dependency found at', dependencyPath);
-
-		try{
-			parentPath = path.dirname(require.resolve(dependencyName));
-		}
-		catch(e){
-			if( e.code === 'MODULE_NOT_FOUND' ){
-				console.log(dependencyName, 'has no parent module to link');
-				return;
-			}
-			throw e;
-		}
-		parentModule = getModule(parentPath);
-
-		//console.log('parent found at', parentPath);
-
-		if( parentModule != dependencyModule ){ // possible when linked dependency targets the parent
-			//console.log('parent found at', parentPath);
-
-			if( dependencyModule.meta.version === parentModule.meta.version ){
-				symlinkModule(parentModule.path, dependencyModule.path);
+			if( parentModule ){
+				// symlink to the parent module
 				linkedModules.push(parentModule.path);
+				symlinkModule(parentModule.path, path.resolve(modulePath, parentModule.name));
 			}
-			else{
-				console.warn(
-					'Cannot symlink: version mismatch',
-					'parent', parentModule.name, '@', parentModule.meta.version, '!=',
-					'module', dependencyModule.name, '@', dependencyModule.meta.version
-				);
-			}
-		}
-	});
 
-	linkedModules.forEach(function(folderPath){
-		symlink(folderPath);
-	});
+			/*
+			if( parentModule != dependencyModule ){
+				if( dependencyModule.meta.version === parentModule.meta.version ){
+					symlinkModule(parentModule.path, dependencyModule.path);
+					linkedModules.push(parentModule.path);
+				}
+				else{
+					console.warn(
+						'Cannot symlink: version mismatch',
+						'parent', parentModule.name, '@', parentModule.meta.version, '!=',
+						'module', dependencyModule.name, '@', dependencyModule.meta.version
+					);
+				}
+			}
+			*/
+		});
+
+		linkedModules.forEach(function(folderPath){
+			symlink(folderPath);
+		});
+	}
+	else{
+		console.log(modulePath, 'has no dependencies');
+	}
 }
 
 if( process.env.npm_config_production !== 'true' ){
-	projectPath = process.argv.length > 2 ? process.argv[2] : process.cwd();
+	var cwd = process.cwd();
+
+	projectPath = process.argv.length > 2 ? path.resolve(cwd, process.argv[2]) : cwd;
 	console.log('symlink', projectPath);
 	symlink(projectPath);
 }
