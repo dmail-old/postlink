@@ -1,7 +1,9 @@
 {
   "name": "@dmail/symlink",
   "version": "1.1.0",
-  "bin": "./symlink.js",
+  "bin": {
+    "node-sync": "./symlink.js"
+  },
   "preferGlobal": true,
   "repository": {
     "type": "git",

@@ -37,7 +37,15 @@ function createModuleFromPath(filepath){
 		throw new Error(filepath + ' has no package.json');
 	}
 
-	var meta = JSON.parse(fs.readFileSync(metaPath));
+	var content = fs.readFileSync(metaPath);
+	var meta;
+	try{
+		meta = JSON.parse(content);
+	}
+	catch(e){
+		console.log('json malformed in', metaPath);
+		throw e;
+	}
 
 	return {
 		name: meta.name,
@@ -209,7 +217,9 @@ function getDependencyModule(modulePath, dependencyName){
 // search any parent folder for the given module
 function getParentModule(modulePath, dependencyName){
 	var parentPath, parentModule;
-	
+
+	dependencyName = dependencyName.replace(/@[a-zAZ\-]+\//, '');
+
 	parentPath = path.join(path.dirname(modulePath), dependencyName);
 	
 	if( fs.existsSync(parentPath) ){
@@ -236,7 +246,7 @@ function symlink(modulePath){
 			if( parentModule ){
 				// symlink to the parent module
 				linkedModules.push(parentModule.path);
-				symlinkModule(parentModule.path, path.resolve(modulePath, parentModule.name));
+				symlinkModule(parentModule.path, path.resolve(modulePath, 'node_modules', parentModule.name));
 			}
 
 			/*
