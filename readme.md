@@ -1,35 +1,30 @@
-# symlink
+# prelink
 
-Symlink your module to keep clean and separate sources from project usage
+link your local modules to avoid duplication
 
-## Example
+## Using package.json
 
-Before
+- Install globally : `npm install -g prelink`
+- Set folder containing git repo : `npm config set git_repo_path "${HOME}/Documents/GitHub"`
 
-```
-/node_modules
-	/a@1.0.0
-	/b@0.0.3
-/your-project
-    /node_modules
-    	/a@1.0.0
-    		/node_modules
-    			b@0.0.3
-    	/b@0.5.0
-```
+Now you can add the preinstall script in your `package.json`
 
-`cd your-project && symlink`
-
-```
-/node_modules
-	/a@1.0.0
-		/node_modules
-			/-> ../../b@0.0.3
-	/b@0.0.3
-/your-project
-    /node_modules
-    	/-> ../../node_modules/a@1.0.0
-    	/b@0.5.0
+```json
+{
+    "scripts": {
+        "preinstall": "prelink"
+    }
+}
 ```
 
-Very similar to [zelda](https://github.com/feross/zelda)
+## Known issues with named package
+
+Right now npm fails to detect that named package are already linked.
+You got two options for now:
+
+- Rerun prelink postinstall
+- Only run preinstall scripts (thus avoiding npm install) : `npm run preinstall`
+
+## Notes
+
+Similar to [zelda](https://github.com/feross/zelda)

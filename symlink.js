@@ -1,7 +1,7 @@
-#!/usr/bin/env node
-
 /*
 Walk the dependencies to symlink any module having a parent module with same name & version
+
+I should detect circular dependencies too
 */
 
 console.log('git repo path', process.env.npm_config_git_repo_path);

@@ -1,7 +1,9 @@
 {
   "name": "prelink",
   "version": "0.0.2",
-  "bin": "./index.js",
+  "bin": {
+    "prelink": "./bin/prelink"
+  },
   "preferGlobal": true,
   "repository": {
     "type": "git",
