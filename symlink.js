@@ -235,6 +235,14 @@ function getParentModule(modulePath, dependencyName){
 	return parentModule;
 }
 
+function npmlink(modulePath, moduleName, moduleLocation){
+	var relativeLocation = path.relative(modulePath, moduleLocation);
+
+	childProcess.execSync('npm link ' + relativeLocation, {
+		cwd: modulePath
+	});
+}
+
 function symlink(modulePath){
 	var linkedModules = [];
 	var module = getModule(modulePath);
@@ -248,7 +256,13 @@ function symlink(modulePath){
 			if( parentModule ){
 				// symlink to the parent module
 				linkedModules.push(parentModule.path);
-				symlinkModule(parentModule.path, path.resolve(modulePath, 'node_modules', parentModule.name));
+
+				npmlink(modulePath, dependencyName, parentModule.path);
+
+				//symlinkModule(parentModule.path, path.join(modulePath, 'node_modules', parentModule.name));
+				// add a symlink to the globally installed module
+				//var globalPath = path.join(process.env.npm_config_prefix, 'node_modules', parentModule.name);
+				//symlinkModule(parentModule.path, globalPath);
 			}
 
 			/*

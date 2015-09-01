@@ -1,13 +1,13 @@
 {
-  "name": "prelink",
+  "name": "postlink",
   "version": "0.0.2",
   "bin": {
-    "prelink": "./bin/prelink"
+    "postlink": "./bin/postlink"
   },
   "preferGlobal": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/dmail/prelink"
+    "url": "https://github.com/dmail/postlink"
   },
   "scripts": {
     "test": "node ./index.js"
