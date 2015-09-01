@@ -4,6 +4,8 @@
 Walk the dependencies to symlink any module having a parent module with same name & version
 */
 
+console.log('git repo path', process.env.npm_config_git_repo_path);
+
 var fs = require('fs');
 var childProcess = require('child_process');
 var path = require('path');
@@ -221,7 +223,7 @@ function getParentModule(modulePath, dependencyName){
 	dependencyName = dependencyName.replace(/@[a-zAZ\-]+\//, '');
 
 	parentPath = path.join(path.dirname(modulePath), dependencyName);
-	
+
 	if( fs.existsSync(parentPath) ){
 		parentModule = getModule(parentPath);
 		debug(dependencyName, 'found at', parentPath);
@@ -240,7 +242,7 @@ function symlink(modulePath){
 
 	if( dependencies.length ){
 		dependencies.forEach(function(dependencyName){
-			//var dependencyModule = getDependencyModule(modulePath, dependencyName);		
+			//var dependencyModule = getDependencyModule(modulePath, dependencyName);
 			var parentModule = getParentModule(modulePath, dependencyName);
 
 			if( parentModule ){

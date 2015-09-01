@@ -1,14 +1,13 @@
 {
-  "name": "@dmail/symlink",
+  "name": "prelink",
   "version": "1.1.0",
-  "bin": {
-    "node-sync": "./symlink.js"
-  },
+  "bin": "./index.js",
   "preferGlobal": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/dmail/symlink"
+    "url": "https://github.com/dmail/prelink"
   },
-  "devDependencies": {},
-  "dependencies": {}
+  "scripts": {
+    "test": "node ./index.js"
+  }
 }
