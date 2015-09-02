@@ -119,7 +119,9 @@ function shortenPath(filepath){
 }
 
 function npmlink(moduleSource, moduleDestination){
-	var relativeLocation = path.relative(moduleSource, moduleDestination);
+	var relativeLocation = path.relative(moduleDestination, moduleSource);
+
+	console.log('npm link', relativeLocation);
 
 	childProcess.execSync('npm link ' + relativeLocation, {
 		cwd: moduleDestination
@@ -132,7 +134,7 @@ function postlink(modulePath){
 	var dependencies = Object.keys(module.dependencies);
 
 	if( dependencies.length ){
-		console.log('postlink dependencies', module.name, dependencies.map(function(dependencyName){
+		console.log(module.name, 'dependencies', dependencies.map(function(dependencyName){
 			return dependencyName + ':' + module.dependencies[dependencyName];
 		}));
 
