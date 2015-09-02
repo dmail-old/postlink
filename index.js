@@ -1,3 +1,3 @@
-var symlink = require('./symlink.js');
+var postlink = require('./postlink.js');
 
-module.exports = symlink;
+module.exports = postlink;
