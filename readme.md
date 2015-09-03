@@ -14,7 +14,7 @@ You go in `bar/package.json` and you run postinstall : `npm link ../foo`
 
 ## So why postinstall ?
 
-Because you can define where all your local packages are located
+Because you define where your local packages are located once.
 
 ## How to use
 
