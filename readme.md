@@ -4,17 +4,17 @@ auto `npm link` your npm packages after `npm install`.
 
 ## Why do you need npm link ?
 
-Imagine you have :
+You have a `bar` package depending on `foo` and you want to keep `bar/node_modules/foo` in sync with `../foo`
 
-- A `bar` package depending on `foo`
-- The `foo` package exists on your filesystem at `../foo`
+## How to npm link foo ?
 
-You want to keep `bar/node_modules/foo` in sync with `../foo`.  
-You go in `bar/package.json` and you run postinstall : `npm link ../foo`
+- You run npm link directly : `npm link ../foo`
+- Or you run it postintsall : in `bar/package.json` you add `"scripts": {"postinstall": "npm link ../foo"}`
 
-## So why postinstall ?
+## What postlink does ?
 
-Because you define where your local packages are located once.
+It read dependencies in `bar/package.json` and `npm link` all packages found in a folder you can define.  
+This way you don't have to pollute your package.json with tons of npm link hard to maintain.
 
 ## How to use
 
@@ -32,6 +32,6 @@ In your `package.json` add postlink as dependency and run it postinstall
 ```
 
 - Define the folder containing your npm packages : `npm config set postlink_path "${HOME}/GitHub"`
-- Run : `npm install` or `npm run postinstall`
+- `npm install` or `npm run postinstall`
 
-It will read the dependencies from `package.json` and `npm link` all packages found in `${HOME}/GitHub`.
+
