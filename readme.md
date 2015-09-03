@@ -6,7 +6,7 @@ auto `npm link` your npm packages after `npm install`.
 
 Imagine you have :
 
-- A `bar` package depends on `foo`
+- A `bar` package depending on `foo`
 - The `foo` package exists on your filesystem at `../foo`
 
 You want to keep `bar/node_modules/foo` in sync with `../foo`.  
