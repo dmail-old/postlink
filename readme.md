@@ -4,17 +4,17 @@ auto `npm link` your npm packages after `npm install`
 
 ## Why do you need npm link ?
 
-You have a `bar` package depending on `foo` and you want to keep `node_modules/foo` in sync with `${HOME}/foo`
+A `bar` package depends on a `foo` package and you want `node_modules/foo` to stay in sync with `${HOME}/foo`
 
-## How to npm link foo ?
+## How would you npm link foo ?
 
-- You run npm link directly : `npm link ${HOME}/foo`
-- Or you run it postintsall : in `package.json` you add `"scripts": {"postinstall": "npm link ${HOME}/foo"}`
+It can be done using `npm link ${HOME}/foo`.  
+The right way to do is to run npm link postinstall by adding it to your package.json scripts.
 
 ## What postlink does ?
 
-It would read dependencies from `package.json` and `npm link` all packages found in a folder you can define.  
-This way you don't have to maintain tons of npm link in `package.json`.
+It prevents you from having to maintain npm link calls in your `package.json`.  
+It read dependencies from `package.json` and `npm link` all packages found in a folder you can define.  
 
 ## How to use
 
@@ -32,8 +32,7 @@ In your `package.json` add postlink as dependency and run it postinstall
 ```
 
 Define the folder containing your npm packages : `npm config set postlink_path "${HOME}"`.  
-
-postlink now runs after `npm install` ensuring `node_modules/*` packages are **in sync with `${HOME}/*`**
+postlink now runs after `npm install` ensuring `node_modules/*` packages are in sync with `${HOME}/*`
 
 ## Defining the folder containing npm packages
 
