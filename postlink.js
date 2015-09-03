@@ -7,7 +7,7 @@ I should detect circular dependencies too
 var fs = require('fs');
 var childProcess = require('child_process');
 var path = require('path');
-var configName = 'postlink_folder';
+var configName = 'postlink_path';
 var projectPath;
 var folderPaths = [];
 var modules = [];
