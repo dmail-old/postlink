@@ -6,7 +6,7 @@ auto `npm link` your npm packages after `npm install`
 
 A `bar` package depends on a `foo` package and you want `node_modules/foo` to stay in sync with `${HOME}/foo`.  
 To achieve this goal you run the command : `npm link ${HOME}/foo`.  
-The right way to do it is to npm link in postinstall scripts of your `package.json`.
+Because you want to automate this npm link command a common practice consist into adding it in the scripts, postinstall section, of your `package.json`.
 
 ## What postlink does ?
 
