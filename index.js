@@ -1,3 +1,3 @@
-var postlink = require('./postlink.js');
+var postlink = require('./lib/postlink.js');
 
 module.exports = postlink;
