@@ -1,3 +1,26 @@
 #!/usr/bin/env node
 
-require('../index.js');
+var exec = require('../index.js');
+var path = require('path');
+
+if( process.env.npm_config_production !== 'true' ){
+	var cwd = process.cwd();
+	var configName = 'postlink_path';
+	console.log('cwd is', cwd);
+
+	var projectPath = process.argv.length > 2 ? path.resolve(cwd, process.argv[2]) : cwd;
+	var postlinkFolder = process.env['npm_config_' + configName];
+
+	if( !postlinkFolder ){
+		postlinkFolder = String(require('child_process').execSync('npm config get postlink_path')).slice(0, -1);
+	}
+
+	if( !postlinkFolder ){
+		console.warn(configName, 'is empty, use "npm config set ' + configName + ' "${HOME}/Documents/GitHub"');
+	}
+	else{
+		exec(projectPath, postlinkFolder);
+	}	
+}
+
+process.exit();
